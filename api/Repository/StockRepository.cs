@@ -18,6 +18,21 @@ namespace api.Repository
         {
             return await _context.Stocks.ToListAsync();
         }
+
+        public async Task<Stock> CreateStockAsync(Stock stockModel)
+        {
+        }
+
+        public async Task<Stock?> UpdateAsync(int id, UpdateStockRequestDto)
+        {
+
+        }
+
+        public async Task<Stock?> DeleteAsync(int id)
+        {
+
+        }
+
     }
 
 }

@@ -11,7 +11,7 @@ namespace api.Interfaces
         Task<Stock?> GetByIdAsync(int id); //FirstOrDefault can be Null
         Task<Stock> CreateStockAsync(Stock stockModel);
         Task<Stock?> UpdateAsync(int id, UpdateStockRequestDto);
-        Tasj<Stock?> DeleteAsync(int id);
+        Task<Stock?> DeleteAsync(int id);
     }
 }
 
