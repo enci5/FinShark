@@ -35,7 +35,7 @@ namespace api.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById([FromRoute] int id)
         {
-            var stock = await _context.Stocks.FindAsync(id);
+            var stock = await _repo.GetByIdAsync(id);
 
             if (stock == null)
             {
@@ -49,8 +49,7 @@ namespace api.Controllers
         public async Task<IActionResult> AddNewStock([FromBody] CreateStockRequestDto stockDto)
         {
             var stockModel = stockDto.ToStockFromCreateDTO();
-            await _context.Stocks.AddAsync(stockModel);
-            await _context.SaveChangesAsync();
+            await _repo.CreateStockAsync(stockModel);
             return CreatedAtAction(nameof(GetById), new { id = stockModel.Id }, stockModel.ToStockDto());
         }
 
@@ -58,23 +57,11 @@ namespace api.Controllers
         [Route("{id}")]
         public async Task<IActionResult> ChangeStock([FromRoute]int id, [FromBody] UpdateStockRequestDto updateDto)
         {
-            var stockModel = await _context.Stocks.FirstOrDefaultAsync(x => x.Id == id);
-
-            if (stockModel == null)
+            var stockModel = await _repo.UpdateAsync(id, updateDto);
+            if (stockModel == null)  
             {
                 return NotFound();
             }
-
-            // take what we got from database, modify the model using what we received from param
-            // this is not a new entity so we don't need to map the entire thing
-            stockModel.Symbol = updateDto.Symbol;
-            stockModel.CompanyName = updateDto.CompanyName;
-            stockModel.Purchase = updateDto.Purchase;
-            stockModel.LastDiv = updateDto.LastDiv;
-            stockModel.Industry = updateDto.Industry;
-            stockModel.MarketCap = updateDto.MarketCap;
-
-            await _context.SaveChangesAsync();
 
             return Ok(stockModel.ToStockDto());
         }
@@ -83,14 +70,11 @@ namespace api.Controllers
         [Route("{id}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
-            var stockModel = await _context.Stocks.FirstOrDefaultAsync(x => x.Id == id);
+            var stockModel = await _repo.DeleteAsync(id);
             if (stockModel == null)
             {
                 return NotFound();
             }
-
-            _context.Stocks.Remove(stockModel); // not Async so don't add await
-            await _context.SaveChangesAsync();
             return NoContent(); // returns 204 which is thumbs up for deleted
         }
     }
