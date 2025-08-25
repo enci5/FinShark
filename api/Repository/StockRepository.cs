@@ -59,7 +59,7 @@ namespace api.Repository
             {
                 return null;
             }
-            _context.Stocks.RemoveAsync(stockModel);
+            _context.Stocks.Remove(stockModel);
             await _context.SaveChangesAsync(); 
             return stockModel;
         }
