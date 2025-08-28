@@ -2,6 +2,7 @@
 using api.Models;
 using api.Data;
 using api.Dtos.Stock;
+using api.Dtos.Comment;
 
 namespace api.Interfaces
 {
