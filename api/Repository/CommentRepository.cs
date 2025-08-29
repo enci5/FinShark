@@ -1,8 +1,23 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using api.Models;
+using api.Interfaces;
+using api.Data;
+using api.Dtos.Comment;
 
-public class Class1
+namespace api.Repository
 {
-	public Class1()
-	{
-	}
+    public class CommentRepository : ICommentRepository
+    {
+        private readonly ApplicationDbContext _context;
+
+        public CommentRepository(ApplicationDbContext context) 
+        { 
+            _context = context;
+        }
+
+        public async Task<List<Comment>> GetAllAsync()
+        {
+            return await _context.Comments.ToListAsync();
+        }
+    }
 }
