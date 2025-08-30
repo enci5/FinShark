@@ -1,5 +1,7 @@
 using api.Models;
 using api.Dtos.Stock;
+using api.Dtos.Comment;
+using api.Models;
 
 namespace api.Mappers
 {
@@ -16,7 +18,8 @@ namespace api.Mappers
                 Purchase = stockModel.Purchase,
                 LastDiv = stockModel.LastDiv,
                 Industry = stockModel.Industry,
-                MarketCap = stockModel.MarketCap
+                MarketCap = stockModel.MarketCap,
+                Comments = stockModel.Comment.Select(c => c.ToCommentDto()).ToList(),
             };
         }
 
