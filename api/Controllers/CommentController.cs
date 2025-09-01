@@ -45,6 +45,11 @@ namespace api.Controller
         [HttpPost("{id:int}")]
         public async Task<IActionResult> Create([FromBody] CreateCommentRequestDto commentDto, [FromRoute]int id)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
             if (!await _stockRepo.StockExistsAsync(id)) 
             {
                 return BadRequest("Stock does not exist");
