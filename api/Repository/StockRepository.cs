@@ -3,6 +3,7 @@ using api.Models;
 using api.Interfaces;
 using api.Data;
 using api.Dtos.Stock;
+using api.Helpers;
 
 namespace api.Repository
 {
@@ -15,9 +16,21 @@ namespace api.Repository
             _context = context;
         }
 
-        public async Task<List<Stock>> GetAllAsync()
+        public async Task<List<Stock>> GetAllAsync(QueryObject queryObject)
         {
-            return await _context.Stocks.Include(c => c.Comment).ToListAsync();
+            var stocks = _context.Stocks.Include(c => c.Comment).AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(queryObject.Symbol))
+            {
+                stocks = stocks.Where(stock => stock.Symbol.Contains(queryObject.Symbol));
+            }
+
+            if (!string.IsNullOrWhiteSpace(queryObject.CompanyName))
+            {
+                stocks = stocks.Where(stock => stock.CompanyName.Contains(queryObject.CompanyName));
+            }
+
+            return await stocks.ToListAsync();
         }
 
         public async Task<Stock?> GetByIdAsync(int id)
