@@ -60,6 +60,20 @@ namespace api.Controller
             return CreatedAtAction(nameof(GetById), new { id = commentModel.Id}, commentModel.ToCommentDto());
         }
 
+        [HttpPut]
+        [Route("{id}")]
+        public async Task<IActionResult> Update([FromBody] UpdateCommentRequestDto commentDto, [FromRoute] int id)
+        {
+            var comment = await _commentRepo.UpdateAsync(id, commentDto.CommnetFromUpdateDto());
+
+            if (comment == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(comment.ToCommentDto());
+        }
+
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
