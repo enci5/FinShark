@@ -13,5 +13,8 @@ namespace api.Dtos.Comment
         [MinLength(1, ErrorMessage = "Content cannot be empty")]
         [MaxLength(200, ErrorMessage = "Content cannot be greater than 200")]
         public string Content { get; set; } = string.Empty;
+
+        public DateTime CreatedDate { get; set; } = DateTime.Now;
+        public int? StockId { get; set; }
     }
 }
