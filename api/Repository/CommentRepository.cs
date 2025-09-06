@@ -34,7 +34,7 @@ namespace api.Repository
             return commentModel;
         }
 
-        public async Task<Comment> UpdateAsync(int id, Comment commentModel)
+        public async Task<Comment?> UpdateAsync(int id, Comment commentModel)
         {
             var existingComment = await _context.Comments.FindAsync(id);
 

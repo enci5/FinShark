@@ -1,7 +1,6 @@
 using api.Models;
 using api.Dtos.Stock;
 using api.Dtos.Comment;
-using api.Models;
 
 namespace api.Mappers
 {
