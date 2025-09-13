@@ -5,6 +5,7 @@ using api.Dtos.User;
 using api.Models;
 using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
+using api.Services;
 
 namespace api.Controller
 {
@@ -12,11 +13,12 @@ namespace api.Controller
     [ApiController]
     public class AccountController: ControllerBase
     {
-        private readonly UserManager<AppUser> _usermanager;
+        private readonly UserManager<AppUser> _usermanager
 
-        public AccountController(UserManager<AppUser> userManager)
+        public AccountController(UserManager<AppUser> userManager, ITokenService service)
         {
             _usermanager = userManager;
+            _service = service
         }
 
         [HttpPost("register")]
