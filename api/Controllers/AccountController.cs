@@ -16,11 +16,13 @@ namespace api.Controller
     {
         private readonly UserManager<AppUser> _usermanager;
         private readonly ITokenService _tokenService;
+        private readonly SignInManager<AppUser> _signinmanager;
 
-        public AccountController(UserManager<AppUser> userManager, ITokenService tokenService)
+        public AccountController(UserManager<AppUser> userManager, ITokenService tokenService, SignInManager<AppUser> signinmanager)
         {
             _usermanager = userManager;
             _tokenService = tokenService;
+            _signinmanager = signinmanager;
         }
 
         [HttpPost("register")]
@@ -65,6 +67,30 @@ namespace api.Controller
             {
                 return StatusCode(500, e);
             }
+        }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> Login(LoginDto loginDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var user = await _usermanager.Users.FirstOrDefaultAsync(x => x.UserName == loginDto.UserName.ToLower());
+            if (user == null) 
+            {
+                return Unauthorized("Invalid Username!");
+            }
+            var result = await _signinmanager.CheckPasswordSignInAsync(user, loginDto.Password, false);
+            if (!result.Succeeded) 
+            {
+                return Unauthorized("Username not found/password incorrect");
+            }
+            return Ok(new NewUserDto
+            {
+                UserName = loginDto.UserName,
+                Token = _tokenService.CreateToken(user)
+            });
         }
     }
 }
