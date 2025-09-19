@@ -1,10 +1,12 @@
 using api.Models;
 using api.Data;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using api.Interfaces;
 
 namespace api.Repository
 {
-    public class PortfolioRepository
+    public class PortfolioRepository : IPortfolioRepository
     {
         public readonly ApplicationDbContext _context;
 
@@ -25,6 +27,13 @@ namespace api.Repository
                     Industry = stock.Stock.Industry,
                     MarketCap = stock.Stock.MarketCap,
                 }).ToListAsync();
+        }
+
+        public async Task<Portfolio> CreateAsync(Portfolio portfolio)
+        {
+            await _context.Portfolios.AddAsync(portfolio);
+            await _context.SaveChangesAsync();
+            return portfolio;
         }
     }
 }
