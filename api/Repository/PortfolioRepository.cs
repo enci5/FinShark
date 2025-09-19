@@ -3,6 +3,7 @@ using api.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using api.Interfaces;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace api.Repository
 {
@@ -35,5 +36,18 @@ namespace api.Repository
             await _context.SaveChangesAsync();
             return portfolio;
         }
+
+        public async Task<Portfolio> DeletePortfolioAsync(AppUser user, string symbol)
+        {
+            var portfolioModel = _context.Portfolios.FirstOrDefault(x => x.AppUserId == user.Id && x.Stock.Symbol.ToLower() == symbol.ToLower());
+            if (portfolioModel == null) 
+            {
+                return null;
+            }
+            _context.Portfolios.Remove(portfolioModel);
+            await _context.SaveChangesAsync();
+            return portfolioModel;
+        }
+
     }
 }

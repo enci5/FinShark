@@ -9,6 +9,7 @@ using api.Interfaces;
 using api.Services;
 using api.Extensions;
 using Microsoft.AspNetCore.Authorization;
+using Azure.Identity;
 
 namespace api.Controller
 {
@@ -39,18 +40,18 @@ namespace api.Controller
 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> AddToPortfolio(string Symbol)
+        public async Task<IActionResult> AddToPortfolio(string symbol)
         {
             var username = User.GetUsername() ?? string.Empty;
             var appUser = await _usermanager.FindByNameAsync(username);
-            var stock = await _stockRepository.GetBySymbolAsync(Symbol);
+            var stock = await _stockRepository.GetBySymbolAsync(symbol);
             if (stock == null) 
             {
-                return BadRequest($"Stock with the symbol {Symbol} not found");
+                return BadRequest($"Stock with the symbol {symbol} not found");
             }
             var userPortfolio = await _portfolioRepository.GetUserPortfolio(appUser);
 
-            if (userPortfolio.Any(s => s.Symbol.ToLower() == Symbol.ToLower())) {
+            if (userPortfolio.Any(s => s.Symbol.ToLower() == symbol.ToLower())) {
                 return BadRequest("Stock already exists");
             }
 
@@ -66,6 +67,25 @@ namespace api.Controller
                 return StatusCode(500, "Could not create portfolio");
             }
             return Created();
+        }
+
+        [HttpDelete]
+        [Authorize]
+        public async Task<IActionResult> RemoveFromPortfolio(string symbol)
+        {
+            var userName = User.GetUsername() ?? string.Empty;
+            var appUser = await _usermanager.FindByNameAsync(userName);
+            var userPortfolio = await _portfolioRepository.GetUserPortfolio(appUser);
+            var filteredStock = userPortfolio.Where(s => s.Symbol.ToLower() == symbol.ToLower()).ToList();
+            if (filteredStock.Count() == 1)
+            {
+                await _portfolioRepository.DeletePortfolioAsync(appUser, symbol);
+            }
+            else
+            {
+                return BadRequest("Stock not in your portfolio");
+            }
+            return Ok();
         }
     }
 }
