@@ -1,0 +1,14 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\api",
+    "\\api\\Controllers",
+    "\\api\\Extensions",
+    "\\api\\Interfaces",
+    "\\api\\Mappers",
+    "\\api\\Models",
+    "\\api\\Repository"
+  ],
+  "SelectedNode": "\\api\\Controllers\\PortfolioController.cs",
+  "PreviewInSolutionExplorer": false
+}
