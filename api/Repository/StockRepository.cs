@@ -4,6 +4,7 @@ using api.Interfaces;
 using api.Data;
 using api.Dtos.Stock;
 using api.Helpers;
+using Microsoft.AspNetCore.Identity;
 
 namespace api.Repository
 {
@@ -18,7 +19,7 @@ namespace api.Repository
 
         public async Task<List<Stock>> GetAllAsync(QueryObject queryObject)
         {
-            var stocks = _context.Stocks.Include(c => c.Comment).AsQueryable();
+            var stocks = _context.Stocks.Include(c => c.Comment).ThenInclude(a => a.AppUser).AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(queryObject.Symbol))
             {
@@ -45,7 +46,7 @@ namespace api.Repository
 
         public async Task<Stock?> GetByIdAsync(int id)
         { 
-            return await _context.Stocks.Include(c => c.Comment).FirstOrDefaultAsync(i => i.Id == id);
+            return await _context.Stocks.Include(c => c.Comment).ThenInclude(a => a.AppUser).FirstOrDefaultAsync(i => i.Id == id);
 
         }
 

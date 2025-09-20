@@ -5,6 +5,8 @@ using api.Data;
 using api.Dtos.Comment;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.Identity.Client;
+using Microsoft.AspNetCore.Identity;
+using api.Extensions;
 
 namespace api.Repository
 {
@@ -19,12 +21,12 @@ namespace api.Repository
 
         public async Task<List<Comment>> GetAllAsync()
         {
-            return await _context.Comments.ToListAsync();
+            return await _context.Comments.Include(a => a.AppUser).ToListAsync();
         }
 
         public async Task<Comment?> GetByIdAsync(int id)
         {
-            return await _context.Comments.FindAsync(id);
+            return await _context.Comments.Include(a => a.AppUser).FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task<Comment> CreateAsync(Comment commentModel)

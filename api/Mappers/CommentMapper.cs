@@ -1,5 +1,7 @@
 ﻿using api.Models;
 using api.Dtos.Comment;
+using api.Extensions;
+using Microsoft.AspNetCore.Identity;
 
 namespace api.Mappers
 {
@@ -15,6 +17,7 @@ namespace api.Mappers
                 Content = commentModel.Content,
                 CreatedDate = commentModel.CreatedDate,
                 StockId = commentModel.StockId,  
+                CreatedBy = commentModel.AppUser.UserName
             };
         }
 
