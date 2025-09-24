@@ -1,5 +1,7 @@
 using api.Interfaces;
 using Microsoft.Extensions.Configuration;
+using api.Dtos.Stock;
+using api.Mappers;
 
 namespace api.Services
 {
@@ -22,10 +24,19 @@ namespace api.Services
                 if result.IsSuccessStatusCode{
                     var content = await result.Content.ReadAsStringAsync();
                     var tasks = JsonConvert.DeserializeObject<FMPStock[]>(content)
+                    var stock = tasks[0];
+                    if (stock != null) 
+                    {
+                        return stock.ToStockFromFMP();
+                    }
+                    return null;
                 }
+                return null;
             }
             catch (Exception e)
             { 
+                Console.WriteLine(e);
+                return null;
             }
         }
     }
