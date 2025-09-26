@@ -12,4 +12,3 @@ namespace api.Helpers
         public int PageSize { get; set; } = 20;
     }
 }
-

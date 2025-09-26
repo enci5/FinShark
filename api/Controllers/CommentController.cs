@@ -10,6 +10,7 @@ using api.Repository;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration.UserSecrets;
 using api.Extensions;
+using api.Helpers;
 
 namespace api.Controller
 {
@@ -31,9 +32,9 @@ namespace api.Controller
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll(CommentQueryObject queryObject)
         {
-            var comment = await _commentRepo.GetAllAsync();
+            var comment = await _commentRepo.GetAllAsync(queryObject);
             var commentDto = comment.Select(c => c.ToCommentDto());
             return Ok(commentDto);
         }
