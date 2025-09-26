@@ -1,7 +1,9 @@
+using api.Models;
+
 namespace api.Interfaces
 {
-    public interface IFPMService
+    public interface IFMPService
     {
-        Task<Stock?> FindStockBySymbolAsync(string symbol);
+        Task<Stock?> GetStockBySymbol(string symbol);
     }
 }

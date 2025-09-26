@@ -37,14 +37,15 @@ namespace api.Mappers
 
         public static Stock ToStockFromFMP(this FMPStock fmpstock)
         {
-            return new Stock 
+            return new Stock
             {
                 Symbol = fmpstock.symbol,
-                CompanyName = fmpstock.CompanyName,
+                CompanyName = fmpstock.companyName,
                 Purchase = (Decimal)fmpstock.price,
-                LastDiv = (Decimal)fmpstock.lastDiv
+                LastDiv = (Decimal)fmpstock.lastDiv,
                 MarketCap = fmpstock.mktCap,
                 Industry = fmpstock.industry,
-            }
+            };
+        }
     }
 }
