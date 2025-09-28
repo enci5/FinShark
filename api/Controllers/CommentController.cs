@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration.UserSecrets;
 using api.Extensions;
 using api.Helpers;
+using Microsoft.AspNetCore.Authorization;
 
 namespace api.Controller
 {
@@ -32,7 +33,8 @@ namespace api.Controller
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll(CommentQueryObject queryObject)
+        [Authorize]
+        public async Task<IActionResult> GetAll([FromQuery]CommentQueryObject queryObject)
         {
             var comment = await _commentRepo.GetAllAsync(queryObject);
             var commentDto = comment.Select(c => c.ToCommentDto());

@@ -26,7 +26,7 @@ namespace api.Repository
 
             if (!string.IsNullOrWhiteSpace(queryObject.Symbol)) 
             {
-                comments = comments.Where(s => s.Symbol == queryObject.Symbol);
+                comments = comments.Where(s => s.Stock.Symbol == queryObject.Symbol);
             }
 
             if(queryObject.IsDescending == true)
